@@ -2,6 +2,22 @@ import type { ToolDefinition } from "./registry.js";
 
 // Import all tools
 import { listTraces, getTrace, deleteTrace } from "./traces/index.js";
+import { listObservations, getObservation } from "./observations/index.js";
+import { createScore, listScores, getScore, deleteScore } from "./scores/index.js";
+import { createScoreConfig, listScoreConfigs, getScoreConfig } from "./score-configs/index.js";
+import {
+  createDataset,
+  listDatasets,
+  getDataset,
+  createDatasetItem,
+  listDatasetItems,
+  getDatasetItem,
+  deleteDatasetItem,
+  createDatasetRunItem,
+  listDatasetRuns,
+  getDatasetRun,
+} from "./datasets/index.js";
+import { listSessions, getSession } from "./sessions/index.js";
 
 // Export registry
 export { ToolRegistry, defineTool, type ToolDefinition } from "./registry.js";
@@ -12,11 +28,22 @@ export { ToolRegistry, defineTool, type ToolDefinition } from "./registry.js";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const allTools: Record<string, ToolDefinition<any>[]> = {
   traces: [listTraces, getTrace, deleteTrace],
-  // observations: [],  // TODO: Phase 2
-  // scores: [],        // TODO: Phase 2
-  // scoreConfigs: [],  // TODO: Phase 2
-  // datasets: [],      // TODO: Phase 3
-  // sessions: [],      // TODO: Phase 4
+  observations: [listObservations, getObservation],
+  scores: [createScore, listScores, getScore, deleteScore],
+  scoreConfigs: [createScoreConfig, listScoreConfigs, getScoreConfig],
+  datasets: [
+    createDataset,
+    listDatasets,
+    getDataset,
+    createDatasetItem,
+    listDatasetItems,
+    getDatasetItem,
+    deleteDatasetItem,
+    createDatasetRunItem,
+    listDatasetRuns,
+    getDatasetRun,
+  ],
+  sessions: [listSessions, getSession],
   // prompts: [],       // TODO: Phase 5 (optional)
 };
 
