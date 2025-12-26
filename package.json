@@ -1,0 +1,63 @@
+{
+  "name": "langfuse-mcp-server",
+  "version": "0.1.0",
+  "description": "Comprehensive MCP server for Langfuse - Traces, Scores, Datasets",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "bin": {
+    "langfuse-mcp-server": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node build/index.js",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "langfuse",
+    "mcp",
+    "model-context-protocol",
+    "llm",
+    "observability",
+    "tracing",
+    "ai"
+  ],
+  "author": "JaviMaligno",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JaviMaligno/langfuse-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JaviMaligno/langfuse-mcp-server/issues"
+  },
+  "homepage": "https://github.com/JaviMaligno/langfuse-mcp-server#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "langfuse": "^3.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
