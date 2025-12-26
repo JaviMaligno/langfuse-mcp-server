@@ -1,12 +1,18 @@
 {
-  "name": "langfuse-mcp-server",
+  "name": "langfuse-mcp-extended",
   "version": "0.1.0",
   "description": "Comprehensive MCP server for Langfuse - Traces, Scores, Datasets",
+  "type": "module",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "bin": {
-    "langfuse-mcp-server": "./build/index.js"
+    "langfuse-mcp-extended": "build/index.js"
   },
+  "files": [
+    "build",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -37,7 +43,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JaviMaligno/langfuse-mcp-server.git"
+    "url": "git+https://github.com/JaviMaligno/langfuse-mcp-server.git"
   },
   "bugs": {
     "url": "https://github.com/JaviMaligno/langfuse-mcp-server/issues"

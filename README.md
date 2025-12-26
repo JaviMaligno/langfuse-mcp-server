@@ -15,13 +15,19 @@ A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) 
 ## Installation
 
 ```bash
-npm install langfuse-mcp-server
+npm install langfuse-mcp-extended
 ```
 
 Or run directly with npx:
 
 ```bash
-npx langfuse-mcp-server
+npx langfuse-mcp-extended
+```
+
+### Quick Setup with Claude Code
+
+```bash
+claude mcp add langfuse -- npx -y langfuse-mcp-extended
 ```
 
 ## Configuration
@@ -48,8 +54,8 @@ Add to your project's `.mcp.json` file:
 ```json
 {
   "langfuse": {
-    "command": "node",
-    "args": ["/path/to/langfuse-mcp-server/build/index.mjs"],
+    "command": "npx",
+    "args": ["-y", "langfuse-mcp-extended"],
     "env": {
       "LANGFUSE_PUBLIC_KEY": "pk-lf-...",
       "LANGFUSE_SECRET_KEY": "sk-lf-...",
@@ -68,7 +74,7 @@ Add to your Claude Desktop configuration (`~/.config/claude/claude_desktop_confi
   "mcpServers": {
     "langfuse": {
       "command": "npx",
-      "args": ["langfuse-mcp-server"],
+      "args": ["-y", "langfuse-mcp-extended"],
       "env": {
         "LANGFUSE_PUBLIC_KEY": "pk-lf-...",
         "LANGFUSE_SECRET_KEY": "sk-lf-...",
@@ -89,7 +95,7 @@ Add to your Cursor MCP settings:
     "servers": {
       "langfuse": {
         "command": "npx",
-        "args": ["langfuse-mcp-server"],
+        "args": ["-y", "langfuse-mcp-extended"],
         "env": {
           "LANGFUSE_PUBLIC_KEY": "pk-lf-...",
           "LANGFUSE_SECRET_KEY": "sk-lf-...",
