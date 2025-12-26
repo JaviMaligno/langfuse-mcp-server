@@ -41,6 +41,24 @@ MCP_ENABLE_PROMPTS=false  # Enable prompt tools (default: false, use official MC
 LOG_LEVEL=info            # debug, info, warn, error
 ```
 
+## Usage with Claude Code
+
+Add to your project's `.mcp.json` file:
+
+```json
+{
+  "langfuse": {
+    "command": "node",
+    "args": ["/path/to/langfuse-mcp-server/build/index.mjs"],
+    "env": {
+      "LANGFUSE_PUBLIC_KEY": "pk-lf-...",
+      "LANGFUSE_SECRET_KEY": "sk-lf-...",
+      "LANGFUSE_BASE_URL": "https://cloud.langfuse.com"
+    }
+  }
+}
+```
+
 ## Usage with Claude Desktop
 
 Add to your Claude Desktop configuration (`~/.config/claude/claude_desktop_config.json`):
@@ -140,8 +158,14 @@ npm run dev
 # Build
 npm run build
 
-# Run tests
+# Run unit tests
 npm test
+
+# Run integration tests (requires Langfuse credentials)
+npm run test:integration
+
+# Run all tests
+npm run test:all
 
 # Type check
 npm run typecheck
@@ -150,9 +174,21 @@ npm run typecheck
 npm run lint
 ```
 
+## Test Coverage
+
+- **59 unit tests** - All tools with mocked API
+- **18 integration tests** - Real API calls against Langfuse
+
+## Upstream Contribution
+
+This project is designed to be contributed to the official Langfuse MCP server. We're actively working with the Langfuse team:
+
+- **Discussion**: [langfuse/langfuse#5646](https://github.com/langfuse/langfuse/discussions/5646)
+- **Issue**: [langfuse/mcp-server-langfuse#14](https://github.com/langfuse/mcp-server-langfuse/issues/14)
+
 ## Contributing
 
-Contributions are welcome! This project is designed to potentially be contributed upstream to the official Langfuse MCP server.
+Contributions are welcome!
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
