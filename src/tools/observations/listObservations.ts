@@ -5,7 +5,7 @@ import { buildQueryString, formatPaginationSummary } from "../../utils/paginatio
 
 const inputSchema = z.object({
   cursor: z.string().optional().describe("Pagination cursor from previous response"),
-  limit: z.number().int().min(1).max(100).optional().default(50).describe("Items per page"),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10).describe("Items per page"),
   traceId: z.string().optional().describe("Filter by trace ID"),
   name: z.string().optional().describe("Filter by observation name"),
   type: z

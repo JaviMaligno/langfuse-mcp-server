@@ -5,8 +5,8 @@ import { buildQueryString, formatPaginationSummary } from "../../utils/paginatio
 
 const inputSchema = z.object({
   datasetName: z.string().min(1).describe("Name of the dataset to list runs from"),
-  page: z.number().int().min(1).optional().describe("Page number (1-indexed)"),
-  limit: z.number().int().min(1).max(100).optional().default(50).describe("Items per page"),
+  page: z.coerce.number().int().min(1).optional().describe("Page number (1-indexed)"),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10).describe("Items per page"),
 });
 
 interface DatasetRunListResponse {

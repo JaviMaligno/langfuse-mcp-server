@@ -4,8 +4,8 @@ import { formatSuccess } from "../../utils/errors.js";
 import { buildQueryString, formatPaginationSummary } from "../../utils/pagination.js";
 
 const inputSchema = z.object({
-  page: z.number().int().min(1).optional().describe("Page number (1-indexed)"),
-  limit: z.number().int().min(1).max(100).optional().default(50).describe("Items per page"),
+  page: z.coerce.number().int().min(1).optional().describe("Page number (1-indexed)"),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10).describe("Items per page"),
   traceId: z.string().optional().describe("Filter by trace ID"),
   observationId: z.string().optional().describe("Filter by observation ID"),
   name: z.string().optional().describe("Filter by score name"),
@@ -25,7 +25,7 @@ const inputSchema = z.object({
     .enum(["<", ">", "<=", ">=", "!=", "="])
     .optional()
     .describe("Comparison operator for value filter"),
-  value: z.number().optional().describe("Value to compare against (requires operator)"),
+  value: z.coerce.number().optional().describe("Value to compare against (requires operator)"),
 });
 
 interface ScoreListResponse {

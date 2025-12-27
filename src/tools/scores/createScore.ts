@@ -7,7 +7,10 @@ const inputSchema = z.object({
   observationId: z.string().optional().describe("Optional: ID of specific observation to score"),
   name: z.string().min(1).describe("Name of the score (e.g., 'accuracy', 'relevance')"),
   value: z
-    .union([z.number(), z.string()])
+    .preprocess(
+      (val) => (typeof val === "string" && !isNaN(Number(val)) ? Number(val) : val),
+      z.union([z.number(), z.string()])
+    )
     .describe("Score value - numeric for NUMERIC type, string for CATEGORICAL/BOOLEAN"),
   dataType: z
     .enum(["NUMERIC", "CATEGORICAL", "BOOLEAN"])
@@ -53,7 +56,7 @@ export const createScore = defineTool({
     const targetDesc = input.observationId
       ? `observation ${input.observationId}`
       : `trace ${input.traceId}`;
-    const summary = `Created score "${input.name}" = ${input.value} for ${targetDesc}`;
+    const summary = `Created score "${input.name}" = ${String(input.value)} for ${targetDesc}`;
 
     return formatSuccess(response, summary);
   },

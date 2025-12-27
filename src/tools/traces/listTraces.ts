@@ -4,8 +4,8 @@ import { formatSuccess } from "../../utils/errors.js";
 import { buildQueryString, formatPaginationSummary } from "../../utils/pagination.js";
 
 const inputSchema = z.object({
-  page: z.number().int().min(1).optional().describe("Page number (1-indexed)"),
-  limit: z.number().int().min(1).max(100).optional().default(50).describe("Items per page"),
+  page: z.coerce.number().int().min(1).optional().describe("Page number (1-indexed)"),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10).describe("Items per page"),
   name: z.string().optional().describe("Filter by trace name"),
   userId: z.string().optional().describe("Filter by user ID"),
   sessionId: z.string().optional().describe("Filter by session ID"),

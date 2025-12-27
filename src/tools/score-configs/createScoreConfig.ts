@@ -3,7 +3,7 @@ import { defineTool } from "../registry.js";
 import { formatSuccess } from "../../utils/errors.js";
 
 const categorySchema = z.object({
-  value: z.number().describe("Numeric value for this category"),
+  value: z.coerce.number().describe("Numeric value for this category"),
   label: z.string().describe("Display label for this category"),
 });
 
@@ -12,11 +12,11 @@ const inputSchema = z.object({
   dataType: z
     .enum(["NUMERIC", "CATEGORICAL", "BOOLEAN"])
     .describe("Type of score values this config accepts"),
-  minValue: z
+  minValue: z.coerce
     .number()
     .optional()
     .describe("Minimum allowed value (NUMERIC only)"),
-  maxValue: z
+  maxValue: z.coerce
     .number()
     .optional()
     .describe("Maximum allowed value (NUMERIC only)"),
