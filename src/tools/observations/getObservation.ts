@@ -4,6 +4,11 @@ import { formatSuccess } from "../../utils/errors.js";
 
 const inputSchema = z.object({
   observationId: z.string().min(1).describe("The unique observation identifier"),
+  includeIO: z.coerce
+    .boolean()
+    .optional()
+    .default(false)
+    .describe("Include input/output fields (can be very large, disabled by default)"),
 });
 
 interface ObservationResponse {
@@ -54,10 +59,18 @@ export const getObservation = defineTool({
       `/api/public/observations/${encodeURIComponent(input.observationId)}`
     );
 
+    // Optionally strip input/output fields to reduce response size
+    let result = response;
+    if (!input.includeIO) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { input: _i, output: _o, ...rest } = response;
+      result = rest as ObservationResponse;
+    }
+
     const typeLabel = response.type.toLowerCase();
     const modelInfo = response.model ? ` using ${response.model}` : "";
     const summary = `${typeLabel} "${response.name || response.id}"${modelInfo}`;
 
-    return formatSuccess(response, summary);
+    return formatSuccess(result, summary);
   },
 });
