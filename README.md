@@ -2,21 +2,37 @@
 
 A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for [Langfuse](https://langfuse.com), providing AI assistants with full access to traces, observations, scores, datasets, and sessions.
 
-> **Note**: This server is designed to complement the [official Langfuse MCP server](https://github.com/langfuse/mcp-server-langfuse) which focuses on prompt management. Use both together for complete Langfuse integration.
+> **Prompt Management**: This server focuses on **observability data**. For prompt management, Langfuse provides a [built-in MCP server](https://langfuse.com/docs/prompt-management/features/mcp-server) ([GitHub](https://github.com/langfuse/mcp-server-langfuse)). We're working on integrating both - see [Contributing](#contributing).
 
 ## Features
 
+- **22 tools** for complete Langfuse observability access
 - **Traces**: List, get, and delete traces with filtering and pagination
 - **Observations**: Query generations, spans, and events with usage metrics
 - **Scores**: Full CRUD operations for evaluation scores (numeric, categorical, boolean)
 - **Score Configs**: Manage score configuration templates
 - **Datasets**: Complete dataset management including items and evaluation runs
 - **Sessions**: Access session data with associated traces
-- **Cloud & Self-hosted**: Works with Langfuse Cloud and self-hosted instances
+- **Cloud & Self-hosted**: Works with Langfuse Cloud (US/EU) and self-hosted instances
 
-## Installation
+## Quick Start
 
-### Claude Desktop
+### One-liner Installation (Claude Code)
+
+```bash
+claude mcp add langfuse -e LANGFUSE_PUBLIC_KEY=pk-lf-xxx -e LANGFUSE_SECRET_KEY=sk-lf-xxx -- npx -y langfuse-mcp-extended
+```
+
+For EU Cloud or self-hosted, add the base URL:
+
+```bash
+claude mcp add langfuse -e LANGFUSE_PUBLIC_KEY=pk-lf-xxx -e LANGFUSE_SECRET_KEY=sk-lf-xxx -e LANGFUSE_BASE_URL=https://eu.cloud.langfuse.com -- npx -y langfuse-mcp-extended
+```
+
+## Installation by Client
+
+<details>
+<summary><strong>Claude Desktop</strong></summary>
 
 Add to your Claude Desktop configuration file:
 
@@ -38,20 +54,36 @@ Add to your Claude Desktop configuration file:
 }
 ```
 
-### Claude Code (CLI)
+For EU Cloud or self-hosted, add `LANGFUSE_BASE_URL`:
 
-```bash
-claude mcp add langfuse -- npx -y langfuse-mcp-extended
+```json
+{
+  "mcpServers": {
+    "langfuse": {
+      "command": "npx",
+      "args": ["-y", "langfuse-mcp-extended"],
+      "env": {
+        "LANGFUSE_PUBLIC_KEY": "pk-lf-...",
+        "LANGFUSE_SECRET_KEY": "sk-lf-...",
+        "LANGFUSE_BASE_URL": "https://eu.cloud.langfuse.com"
+      }
+    }
+  }
+}
 ```
 
-Then set your environment variables in your shell or `.env` file:
+</details>
+
+<details>
+<summary><strong>Claude Code (CLI)</strong></summary>
+
+**Option 1: One-liner with environment variables**
 
 ```bash
-export LANGFUSE_PUBLIC_KEY="pk-lf-..."
-export LANGFUSE_SECRET_KEY="sk-lf-..."
+claude mcp add langfuse -e LANGFUSE_PUBLIC_KEY=pk-lf-xxx -e LANGFUSE_SECRET_KEY=sk-lf-xxx -- npx -y langfuse-mcp-extended
 ```
 
-Or add directly to your project's `.mcp.json`:
+**Option 2: Add to project's `.mcp.json`**
 
 ```json
 {
@@ -68,13 +100,32 @@ Or add directly to your project's `.mcp.json`:
 }
 ```
 
-### VS Code / Cursor
+**Option 3: Use shell environment variables**
 
-Add to your MCP settings (`.vscode/mcp.json` or Cursor equivalent):
+```bash
+claude mcp add langfuse -- npx -y langfuse-mcp-extended
+```
+
+Then set in your shell profile (`.bashrc`, `.zshrc`, etc.):
+
+```bash
+export LANGFUSE_PUBLIC_KEY="pk-lf-..."
+export LANGFUSE_SECRET_KEY="sk-lf-..."
+```
+
+</details>
+
+<details>
+<summary><strong>Cursor</strong></summary>
+
+Add to your Cursor MCP configuration:
+
+- **Project-specific**: `.cursor/mcp.json` in your project directory
+- **Global**: `~/.cursor/mcp.json` in your home directory
 
 ```json
 {
-  "servers": {
+  "mcpServers": {
     "langfuse": {
       "command": "npx",
       "args": ["-y", "langfuse-mcp-extended"],
@@ -87,13 +138,42 @@ Add to your MCP settings (`.vscode/mcp.json` or Cursor equivalent):
 }
 ```
 
-### Global Installation
+Or add via UI: **File → Preferences → Cursor Settings → MCP**
+
+</details>
+
+<details>
+<summary><strong>VS Code</strong></summary>
+
+Add to `.vscode/mcp.json` in your workspace:
+
+```json
+{
+  "mcpServers": {
+    "langfuse": {
+      "command": "npx",
+      "args": ["-y", "langfuse-mcp-extended"],
+      "env": {
+        "LANGFUSE_PUBLIC_KEY": "pk-lf-...",
+        "LANGFUSE_SECRET_KEY": "sk-lf-..."
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Global npm Installation</strong></summary>
 
 ```bash
 npm install -g langfuse-mcp-extended
 ```
 
 Then use `langfuse-mcp-extended` as the command instead of `npx -y langfuse-mcp-extended`.
+
+</details>
 
 ## Configuration
 
@@ -130,7 +210,7 @@ All list operations use **page-based pagination** with a default limit of **10 i
 
 ### Response Size Control
 
-Get operations (`getTrace`, `getSession`, `getObservation`) support an `includeIO` parameter to control response size:
+Get operations (`getTrace`, `getSession`, `getObservation`) support an `includeIO` parameter:
 
 - `includeIO` (boolean, optional): Include input/output fields. Default: `false`
 
@@ -138,7 +218,8 @@ When `includeIO` is `false` (default), large `input` and `output` fields are str
 
 ---
 
-### Traces
+<details>
+<summary><strong>Traces</strong> - 3 tools</summary>
 
 #### `listTraces`
 List traces with filtering and pagination.
@@ -170,9 +251,10 @@ Delete a trace.
 **Inputs:**
 - `traceId` (string, required): The trace ID to delete
 
----
+</details>
 
-### Observations
+<details>
+<summary><strong>Observations</strong> - 2 tools</summary>
 
 #### `listObservations`
 List observations (generations, spans, events) with cursor-based pagination.
@@ -198,9 +280,10 @@ Get a specific observation with all details.
 
 **Returns:** Observation with usage, costs, and timing.
 
----
+</details>
 
-### Scores
+<details>
+<summary><strong>Scores</strong> - 4 tools</summary>
 
 #### `createScore`
 Create a score for a trace or observation.
@@ -243,9 +326,10 @@ Delete a score.
 **Inputs:**
 - `scoreId` (string, required): The score ID to delete
 
----
+</details>
 
-### Score Configs
+<details>
+<summary><strong>Score Configs</strong> - 3 tools</summary>
 
 #### `createScoreConfig`
 Create a score configuration template.
@@ -270,9 +354,10 @@ Get a specific score configuration.
 **Inputs:**
 - `configId` (string, required): The config ID
 
----
+</details>
 
-### Datasets
+<details>
+<summary><strong>Datasets</strong> - 10 tools</summary>
 
 #### `createDataset`
 Create a new dataset.
@@ -352,9 +437,10 @@ Get a specific dataset run.
 - `datasetName` (string, required): Dataset name
 - `runName` (string, required): Run name
 
----
+</details>
 
-### Sessions
+<details>
+<summary><strong>Sessions</strong> - 2 tools</summary>
 
 #### `listSessions`
 List all sessions.
@@ -373,24 +459,25 @@ Get a specific session with its traces.
 
 **Returns:** Session with associated traces.
 
+</details>
+
 ---
 
 ## Using with Official Langfuse MCP (Prompts)
 
-This server focuses on observability data (traces, scores, datasets). For **prompt management**, use the [official Langfuse MCP server](https://github.com/langfuse/mcp-server-langfuse) alongside this one:
+This server provides **observability tools** (traces, scores, datasets). For **prompt management**, Langfuse provides a [built-in MCP server](https://langfuse.com/docs/prompt-management/features/mcp-server) that requires no installation.
+
+### Built-in Langfuse MCP (Recommended)
+
+The Langfuse MCP server is built directly into Langfuse at `/api/public/mcp`. See the [official documentation](https://langfuse.com/docs/prompt-management/features/mcp-server) for setup instructions.
+
+### Using Both Servers Together
+
+To use Langfuse observability (this server) alongside the official prompts MCP:
 
 ```json
 {
   "mcpServers": {
-    "langfuse-prompts": {
-      "command": "npx",
-      "args": ["-y", "@langfuse/mcp-server-langfuse"],
-      "env": {
-        "LANGFUSE_PUBLIC_KEY": "pk-lf-...",
-        "LANGFUSE_SECRET_KEY": "sk-lf-...",
-        "LANGFUSE_BASEURL": "https://cloud.langfuse.com"
-      }
-    },
     "langfuse-observability": {
       "command": "npx",
       "args": ["-y", "langfuse-mcp-extended"],
@@ -402,6 +489,10 @@ This server focuses on observability data (traces, scores, datasets). For **prom
   }
 }
 ```
+
+Then configure the built-in Langfuse prompts MCP following the [official guide](https://langfuse.com/docs/prompt-management/features/mcp-server).
+
+> **Note**: We're actively working with the Langfuse team to potentially integrate both servers. See [Contributing](#contributing) for details.
 
 ## Development
 
@@ -416,27 +507,24 @@ npm run build
 npm run dev
 
 # Run tests
-npm test              # Unit tests
-npm run test:integration  # Integration tests (requires credentials)
-npm run test:all      # All tests
+npm test                  # Unit tests (59 tests)
+npm run test:integration  # Integration tests (18 tests)
+npm run test:all          # All tests
 
 # Quality checks
-npm run lint          # Lint code
-npm run typecheck     # Type check
+npm run lint
+npm run typecheck
 ```
-
-## Test Coverage
-
-- **59 unit tests** covering all tools with mocked API responses
-- **18 integration tests** validating real API interactions
 
 ## Contributing
 
-Contributions are welcome! This project aims to be contributed to the official Langfuse ecosystem.
+Contributions are welcome! This project aims to be integrated into the official Langfuse ecosystem.
 
-- **Discussion**: [langfuse/langfuse#5646](https://github.com/langfuse/langfuse/discussions/5646)
-- **Issue**: [langfuse/mcp-server-langfuse#14](https://github.com/langfuse/mcp-server-langfuse/issues/14)
+**Active discussions:**
+- [langfuse/langfuse#5646](https://github.com/langfuse/langfuse/discussions/5646) - Integration discussion
+- [langfuse/mcp-server-langfuse#14](https://github.com/langfuse/mcp-server-langfuse/issues/14) - Feature request
 
+**How to contribute:**
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
@@ -450,6 +538,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 ## Related
 
 - [Langfuse](https://langfuse.com) - Open source LLM observability
-- [Official Langfuse MCP Server](https://github.com/langfuse/mcp-server-langfuse) - Prompt management MCP
+- [Langfuse MCP Server (Prompts)](https://langfuse.com/docs/prompt-management/features/mcp-server) - Built-in prompt management MCP
 - [Model Context Protocol](https://modelcontextprotocol.io) - MCP specification
 - [MCP Servers Registry](https://github.com/modelcontextprotocol/servers) - Official MCP servers
