@@ -4,6 +4,7 @@ import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import type { LangfuseClient } from "../client.js";
 import type { Config, Logger } from "../config.js";
 import { handleToolError } from "../utils/errors.js";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Definition of an MCP tool with typed input schema
@@ -79,7 +80,7 @@ export class ToolRegistry {
     return Array.from(this.tools.values()).map((tool) => ({
       name: tool.name,
       description: tool.description,
-      inputSchema: this.zodToJsonSchema(tool.inputSchema) as Tool["inputSchema"],
+      inputSchema: zodToJsonSchema(tool.inputSchema, { target: "openApi3" }) as Tool["inputSchema"],
     }));
   }
 
@@ -118,91 +119,4 @@ export class ToolRegistry {
     }
   }
 
-  /**
-   * Convert Zod schema to JSON Schema for MCP
-   */
-  private zodToJsonSchema(schema: z.ZodTypeAny): Record<string, unknown> {
-    // Use zod-to-json-schema or manual conversion
-    // For now, we extract the shape from Zod objects
-    const jsonSchema: Record<string, unknown> = {
-      type: "object",
-      properties: {},
-      required: [] as string[],
-    };
-
-    // Handle ZodObject
-    if ("shape" in schema && typeof schema.shape === "object") {
-      const shape = schema.shape as Record<string, z.ZodTypeAny>;
-      const properties: Record<string, unknown> = {};
-      const required: string[] = [];
-
-      for (const [key, value] of Object.entries(shape)) {
-        properties[key] = this.zodTypeToJsonSchema(value);
-
-        // Check if required (not optional)
-        if (!value.isOptional()) {
-          required.push(key);
-        }
-      }
-
-      jsonSchema.properties = properties;
-      if (required.length > 0) {
-        jsonSchema.required = required;
-      }
-    }
-
-    return jsonSchema;
-  }
-
-  /**
-   * Convert individual Zod type to JSON Schema
-   */
-  private zodTypeToJsonSchema(zodType: z.ZodTypeAny): Record<string, unknown> {
-    const schema: Record<string, unknown> = {};
-
-    // Get description if available
-    if (zodType.description) {
-      schema.description = zodType.description;
-    }
-
-    // Handle optional wrapper
-    let innerType = zodType;
-    if ("unwrap" in zodType && typeof zodType.unwrap === "function") {
-      innerType = zodType.unwrap() as z.ZodTypeAny;
-    }
-
-    // Determine type
-    const typeName = innerType._def?.typeName;
-
-    switch (typeName) {
-      case "ZodString":
-        schema.type = "string";
-        break;
-      case "ZodNumber":
-        schema.type = "number";
-        break;
-      case "ZodBoolean":
-        schema.type = "boolean";
-        break;
-      case "ZodArray":
-        schema.type = "array";
-        if (innerType._def?.type) {
-          schema.items = this.zodTypeToJsonSchema(innerType._def.type as z.ZodTypeAny);
-        }
-        break;
-      case "ZodObject":
-        schema.type = "object";
-        break;
-      case "ZodEnum":
-        schema.type = "string";
-        if (innerType._def?.values) {
-          schema.enum = innerType._def.values;
-        }
-        break;
-      default:
-        schema.type = "string"; // Default fallback
-    }
-
-    return schema;
-  }
 }
