@@ -1,6 +1,6 @@
 {
   "name": "langfuse-mcp-extended",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Comprehensive MCP server for Langfuse - Traces, Scores, Datasets",
   "type": "module",
   "main": "build/index.js",
