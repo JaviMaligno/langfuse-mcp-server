@@ -39,7 +39,7 @@ export function createServer(config: Config, logger: Logger) {
   );
 
   // Handle list tools request
-  server.setRequestHandler(ListToolsRequestSchema, async () => {
+  server.setRequestHandler(ListToolsRequestSchema, () => {
     logger.debug("Received list tools request");
     return {
       tools: toolRegistry.getTools(),
@@ -87,8 +87,8 @@ export async function runServer(config: Config, logger: Logger): Promise<void> {
     process.exit(0);
   };
 
-  process.on("SIGINT", shutdown);
-  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", () => void shutdown());
+  process.on("SIGTERM", () => void shutdown());
 
   // Connect and run
   await server.connect(transport);
