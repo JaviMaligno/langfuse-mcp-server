@@ -531,6 +531,10 @@ Contributions are welcome! This project aims to be integrated into the official 
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## Author
+
+Built by [Javier Aguilar](https://www.javieraguilar.ai) - AI Agent Architect specializing in multi-agent orchestration and MCP development.
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
