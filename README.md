@@ -6,7 +6,7 @@ A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) 
 
 ## Features
 
-- **22 tools** for complete Langfuse observability access
+- **24 tools** for complete Langfuse observability access
 - **Traces**: List, get, and delete traces with filtering and pagination
 - **Observations**: Query generations, spans, and events with usage metrics
 - **Scores**: Full CRUD operations for evaluation scores (numeric, categorical, boolean)
