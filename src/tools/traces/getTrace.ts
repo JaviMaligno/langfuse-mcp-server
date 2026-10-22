@@ -61,7 +61,7 @@ export const getTrace = defineTool({
     if (!input.includeIO) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { input: _i, output: _o, ...rest } = response;
-      result = rest as TraceResponse;
+      result = rest;
     }
 
     const observationCount = response.observations?.length ?? 0;

@@ -64,7 +64,7 @@ export const getObservation = defineTool({
     if (!input.includeIO) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { input: _i, output: _o, ...rest } = response;
-      result = rest as ObservationResponse;
+      result = rest;
     }
 
     const typeLabel = response.type.toLowerCase();

@@ -8,10 +8,7 @@ const inputSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).optional().default(10).describe("Items per page"),
   traceId: z.string().optional().describe("Filter by trace ID"),
   name: z.string().optional().describe("Filter by observation name"),
-  type: z
-    .enum(["GENERATION", "SPAN", "EVENT"])
-    .optional()
-    .describe("Filter by observation type"),
+  type: z.enum(["GENERATION", "SPAN", "EVENT"]).optional().describe("Filter by observation type"),
   parentObservationId: z.string().optional().describe("Filter by parent observation"),
   fromStartTime: z.string().optional().describe("Start of time range (ISO 8601)"),
   toStartTime: z.string().optional().describe("End of time range (ISO 8601)"),
@@ -94,9 +91,7 @@ export const listObservations = defineTool({
     const result = {
       ...response,
       nextCursor:
-        response.meta.page < response.meta.totalPages
-          ? String(response.meta.page + 1)
-          : undefined,
+        response.meta.page < response.meta.totalPages ? String(response.meta.page + 1) : undefined,
     };
 
     return formatSuccess(result, summary);

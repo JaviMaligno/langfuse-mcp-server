@@ -12,14 +12,8 @@ const inputSchema = z.object({
   dataType: z
     .enum(["NUMERIC", "CATEGORICAL", "BOOLEAN"])
     .describe("Type of score values this config accepts"),
-  minValue: z.coerce
-    .number()
-    .optional()
-    .describe("Minimum allowed value (NUMERIC only)"),
-  maxValue: z.coerce
-    .number()
-    .optional()
-    .describe("Maximum allowed value (NUMERIC only)"),
+  minValue: z.coerce.number().optional().describe("Minimum allowed value (NUMERIC only)"),
+  maxValue: z.coerce.number().optional().describe("Maximum allowed value (NUMERIC only)"),
   categories: z
     .array(categorySchema)
     .optional()
@@ -61,7 +55,10 @@ export const createScoreConfig = defineTool({
     );
 
     let summary = `Created score config "${input.name}" (${input.dataType})`;
-    if (input.dataType === "NUMERIC" && (input.minValue !== undefined || input.maxValue !== undefined)) {
+    if (
+      input.dataType === "NUMERIC" &&
+      (input.minValue !== undefined || input.maxValue !== undefined)
+    ) {
       summary += ` with range [${input.minValue ?? "-∞"}, ${input.maxValue ?? "∞"}]`;
     } else if (input.dataType === "CATEGORICAL" && input.categories) {
       summary += ` with ${input.categories.length} categories`;

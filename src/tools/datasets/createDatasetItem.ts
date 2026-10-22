@@ -13,10 +13,7 @@ const inputSchema = z.object({
     .optional()
     .describe("Link to source observation (requires sourceTraceId)"),
   id: z.string().optional().describe("Custom ID for idempotent upsert"),
-  status: z
-    .enum(["ACTIVE", "ARCHIVED"])
-    .optional()
-    .describe("Item status (defaults to ACTIVE)"),
+  status: z.enum(["ACTIVE", "ARCHIVED"]).optional().describe("Item status (defaults to ACTIVE)"),
 });
 
 interface DatasetItemCreateResponse {
@@ -35,8 +32,7 @@ interface DatasetItemCreateResponse {
 
 export const createDatasetItem = defineTool({
   name: "createDatasetItem",
-  description:
-    "Create or upsert a dataset item. Use id parameter for idempotent updates.",
+  description: "Create or upsert a dataset item. Use id parameter for idempotent updates.",
   inputSchema,
   handler: async (input, client, logger) => {
     logger.debug("createDatasetItem called with:", input);
