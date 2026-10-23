@@ -9,10 +9,7 @@ const inputSchema = z.object({
   traceId: z.string().optional().describe("Filter by trace ID"),
   observationId: z.string().optional().describe("Filter by observation ID"),
   name: z.string().optional().describe("Filter by score name"),
-  source: z
-    .enum(["API", "ANNOTATION", "EVAL"])
-    .optional()
-    .describe("Filter by score source"),
+  source: z.enum(["API", "ANNOTATION", "EVAL"]).optional().describe("Filter by score source"),
   dataType: z
     .enum(["NUMERIC", "CATEGORICAL", "BOOLEAN"])
     .optional()

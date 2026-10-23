@@ -13,11 +13,7 @@ export interface ToolDefinition<TInput = unknown> {
   name: string;
   description: string;
   inputSchema: z.ZodType<TInput>;
-  handler: (
-    input: TInput,
-    client: LangfuseClient,
-    logger: Logger
-  ) => Promise<CallToolResult>;
+  handler: (input: TInput, client: LangfuseClient, logger: Logger) => Promise<CallToolResult>;
   /**
    * Optional function to determine if tool should be enabled
    */
@@ -27,9 +23,7 @@ export interface ToolDefinition<TInput = unknown> {
 /**
  * Create a type-safe tool definition
  */
-export function defineTool<TInput>(
-  definition: ToolDefinition<TInput>
-): ToolDefinition<TInput> {
+export function defineTool<TInput>(definition: ToolDefinition<TInput>): ToolDefinition<TInput> {
   return definition;
 }
 
@@ -118,5 +112,4 @@ export class ToolRegistry {
       return handleToolError(error);
     }
   }
-
 }

@@ -13,10 +13,7 @@ const inputSchema = z.object({
   fromTimestamp: z.string().optional().describe("Start of time range (ISO 8601)"),
   toTimestamp: z.string().optional().describe("End of time range (ISO 8601)"),
   environment: z.string().optional().describe("Filter by environment"),
-  orderBy: z
-    .enum(["timestamp", "latency", "totalCost"])
-    .optional()
-    .describe("Sort field"),
+  orderBy: z.enum(["timestamp", "latency", "totalCost"]).optional().describe("Sort field"),
 });
 
 interface TraceListResponse {
@@ -64,7 +61,10 @@ export const listTraces = defineTool({
     };
 
     const query = buildQueryString(queryParams);
-    const response = await client.apiRequest<TraceListResponse>("GET", `/api/public/traces${query}`);
+    const response = await client.apiRequest<TraceListResponse>(
+      "GET",
+      `/api/public/traces${query}`
+    );
 
     const summary = formatPaginationSummary(
       response.data.length,

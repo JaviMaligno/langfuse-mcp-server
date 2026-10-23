@@ -55,9 +55,7 @@ export const listSessions = defineTool({
     const result = {
       ...response,
       nextCursor:
-        response.meta.page < response.meta.totalPages
-          ? String(response.meta.page + 1)
-          : undefined,
+        response.meta.page < response.meta.totalPages ? String(response.meta.page + 1) : undefined,
     };
 
     return formatSuccess(result, summary);
